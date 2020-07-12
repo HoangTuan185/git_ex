@@ -6,7 +6,7 @@ from tensorflow import keras
 from keras import models, layers
 from sklearn.preprocessing import StandardScaler
 
-class data():
+class data1():
     def __init__(self):
         pass
 
