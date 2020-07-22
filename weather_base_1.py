@@ -59,32 +59,41 @@ class model():
         self.model.add(layers.Dense(10, activation='relu'))
         self.model.add(layers.Dropout(lamb))
         self.model.add(layers.Dense(1, activation='sigmoid'))
-        self.model.compile(optimizer='rmsprop',loss='mse',metrics=['mae'])
+        self.model.compile(optimizer='rmsprop',loss='binary_crossentropy',metrics=['accuracy'])
         return self.model
     
     def model_fit(self,train_data,train_label,val_data,val_label,epochs,batch_size):
         self.his = self.fit(train_data,train_label,batch_size=batch_size,epochs=epochs,
                             validation_data=(val_data,val_label))
-        self.mse = self.his.history['mse']
-        self.mae = self.his.history['mae']
-        self.val_mse = self.his.history['val_mse']
-        self.val_mae = self.his.history['val_mae']
-        return self, self.mse, self.mae, self.val_mse, self.val_mae
+        self.loss = self.his.history['loss']
+        self.acc = self.his.history['acc']
+        self.val_loss = self.his.history['val_loss']
+        self.val_acc = self.his.history['val_acc']
+        return self, self.loss, self.acc, self.val_loss, self.val_acc
     
-    def plot_learning_curve(self,mae,val_mae,epoch):
+    def plot_learning_curve(self,loss,val_loss,epoch):
         self.epochs = range(1,epoch+1)
-        plt.plot(self.epochs,mae,'bo',label='Train mae')
-        plt.plot(self.epochs,val_mae,'b+',label='Validation_mae')
-        plt.title('Traning and validation mean absolute error')
+        plt.plot(self.epochs,loss,'bo',label='Train loss')
+        plt.plot(self.epochs,val_loss,'b+',label='Validation_loss')
+        plt.title('Traning and validation loss')
         plt.xlabel('Epochs')
-        plt.ylabel('MAE')
+        plt.ylabel('loss')
         plt.legend()
         plt.show()
         
     def model_evaluate(self,test_data,test_label):
-        self.test_mse, self.test_mae = self.evaluate(test_data,test_label)
-        print('test_mae_score: {} '.format(self.test_mae))
-        
+        self.test_loss, self.test_acc = self.evaluate(test_data,test_label)
+        print('test_acc_score: {} '.format(self.test_acc))
+    def predict(self, (tempC,windspeedKmph,winddirdegree,humidity,pressureMB)):
+        sample = np.zeros(5)
+        sc = StandardScaler()
+        sample[0] = sc.fit_transform(tempC)
+        sample[1] = sc.fit_transform(windspeedKmph)
+        sample[2] = sc.fit_transform(winddirdegree)
+        sample[3] = sc.fit_transform(humidity)
+        sample[4] = sc.fit_transform(pressureMB)
+        print("Result is :",self.predict(sample))
+        return self.predict(sample)
     def model_save(self):
         self.save('weather_predict.h5')
         
