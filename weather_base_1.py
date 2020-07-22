@@ -48,19 +48,19 @@ class data():
         return (self.train_data,self.train_label),(self.val_data,self.val_label),(self.test_data,self.test_label)
     
 class model():
-    def build_model(self,input_shape,lamb):
-        self.model = models.Sequential()
-        self.model.add(layers.Dense(32, activation='relu', input_shape=(input_shape,)))
-        self.model.add(layers.Dropout(lamb))
-        self.model.add(layers.Dense(64, activation='relu'))
-        self.model.add(layers.Dropout(lamb))
-        self.model.add(layers.Dense(64, activation='relu'))
-        self.model.add(layers.Dropout(lamb))
-        self.model.add(layers.Dense(10, activation='relu'))
-        self.model.add(layers.Dropout(lamb))
-        self.model.add(layers.Dense(1, activation='sigmoid'))
-        self.model.compile(optimizer='rmsprop',loss='binary_crossentropy',metrics=['accuracy'])
-        return self.model
+    def __init__(self, input_shape,lamb):
+        self = models.Sequential()
+        self.add(layers.Dense(32, activation='relu', input_shape=(input_shape,)))
+        self.add(layers.Dropout(lamb))
+        self.add(layers.Dense(64, activation='relu'))
+        self.add(layers.Dropout(lamb))
+        self.add(layers.Dense(64, activation='relu'))
+        self.add(layers.Dropout(lamb))
+        self.add(layers.Dense(10, activation='relu'))
+        self.add(layers.Dropout(lamb))
+        self.add(layers.Dense(1, activation='sigmoid'))
+        self.compile(optimizer='rmsprop',loss='binary_crossentropy',metrics=['accuracy'])
+        return self
     
     def model_fit(self,train_data,train_label,val_data,val_label,epochs,batch_size):
         self.his = self.fit(train_data,train_label,batch_size=batch_size,epochs=epochs,
